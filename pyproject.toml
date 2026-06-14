@@ -1,0 +1,21 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "kol-tui"
+version = "0.1.0"
+description = "Terminal dashboard for KOL analytics — sortable tables, live filters, fraud flag highlighting"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+dependencies = [
+    "textual>=0.80.0",
+    "pandas>=2.0.0",
+]
+
+[project.scripts]
+kol-tui = "koltui.app:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/koltui"]

@@ -1,0 +1,31 @@
+handle,platform,region,subscribers,reach,avg_views,er_pct,cpm,frequency,price,fraud_flags
+@cryptoinsider,tg,CIS,120000,35000,3500,2.9,12.9,5.0,450,
+@defi_daily,tg,CIS,45000,22000,2200,4.9,9.1,3.5,200,
+@altcoinalerts,tg,CIS,200000,5000,500,0.2,16.0,7.0,80,Reach/subs ratio extremely low (2.5%) — likely dead or bot subscribers
+@web3marketing,tg,Global,85000,28000,2800,3.3,10.7,4.0,300,
+@nftcollectors,tg,Europe,30000,15000,1500,5.0,6.7,2.0,100,
+@tokenalpha,tg,CIS,65000,19000,1900,2.9,15.8,3.0,300,
+@defi_whale,tg,CIS,310000,8000,800,0.3,12.5,8.0,100,Engagement rate 0.3% is very low for channel size (310,000 subs)
+@blockchain_ru,tg,CIS,150000,45000,4500,3.0,11.1,6.0,500,
+@crypto_signals,tg,CIS,95000,3500,350,0.4,28.6,10.0,100,Reach/subs ratio below average (3.7%)
+@airdrop_hunter,tg,Global,220000,80000,8000,3.6,3.8,4.5,300,
+@memecoin_daily,tg,CIS,40000,25000,2500,6.3,4.0,5.0,100,
+@solana_insider,tg,Global,75000,30000,3000,4.0,8.3,3.0,250,
+@eth_maximalist,tg,Europe,55000,20000,2000,3.6,7.5,2.5,150,
+@ton_ecosystem,tg,CIS,110000,40000,4000,3.6,5.0,5.0,200,
+@gamefi_news,tg,Asia,90000,18000,1800,2.0,16.7,4.0,300,
+@depin_tracker,tg,Global,25000,12000,1200,4.8,8.3,2.0,100,
+@l2_updates,tg,Global,60000,25000,2500,4.2,6.0,3.5,150,
+@rwa_research,tg,Europe,35000,18000,1800,5.1,5.6,1.5,100,
+@ai_crypto,tg,Global,180000,60000,6000,3.3,5.0,4.0,300,
+@privacy_coins,tg,CIS,20000,8000,800,4.0,12.5,2.0,100,
+@CryptoTips,yt,Global,450000,120000,12000,2.7,4.2,1.0,500,
+@TheBlockchainBoy,yt,Global,280000,90000,9000,3.2,5.6,2.0,500,
+@DeFiMasterclass,yt,Global,150000,50000,5000,3.3,6.0,1.5,300,
+@AltcoinBuzz,yt,Global,650000,200000,20000,3.1,2.5,3.0,500,
+@CryptoRevolution,yt,CIS,120000,30000,3000,2.5,16.7,2.0,500,Reach/subs ratio below average (25.0%)
+@Web3Academy,yt,Global,95000,40000,4000,4.2,5.0,1.0,200,
+@TokenMetrics,yt,Global,200000,70000,7000,3.5,4.3,2.5,300,
+@CryptoBanter,yt,Global,800000,250000,25000,3.1,2.0,5.0,500,
+@InvestAnswers,yt,Global,550000,180000,18000,3.3,2.8,2.0,500,
+@GuyOnCrypto,yt,Europe,350000,100000,10000,2.9,5.0,1.5,500,
