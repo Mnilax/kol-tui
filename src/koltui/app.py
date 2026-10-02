@@ -41,7 +41,7 @@ class KOLDashboard(App):
     def __init__(self, data_path: str | None = None, **kwargs):
         super().__init__(**kwargs)
         self._data_path = data_path
-        self._all_channels: list[Channel] = []
+        self._all_channels: list[Channel] = load_file(data_path) if data_path else []
         self._show_filters = True
 
     def compose(self) -> ComposeResult:
@@ -53,12 +53,6 @@ class KOLDashboard(App):
                 yield ChannelTable(self._all_channels, id="channel-table")
         yield DetailPane(id="detail-pane")
         yield Footer()
-
-    def on_mount(self) -> None:
-        if self._data_path:
-            self._all_channels = load_file(self._data_path)
-            table = self.query_one("#channel-table", ChannelTable)
-            table.refresh_data(self._all_channels)
 
     def on_filter_panel_filters_changed(self, event: FilterPanel.FiltersChanged) -> None:
         """Apply filters to the channel table."""
@@ -108,7 +102,11 @@ def main():
         print(f"Error: file not found: {data_path}")
         sys.exit(1)
 
-    app = KOLDashboard(data_path=data_path)
+    try:
+        app = KOLDashboard(data_path=data_path)
+    except (OSError, ValueError) as exc:
+        print(f"Error loading data: {exc}", file=sys.stderr)
+        sys.exit(1)
     app.run()
 
 

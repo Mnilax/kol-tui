@@ -4,9 +4,10 @@ from __future__ import annotations
 
 from textual.widgets import DataTable
 from textual.message import Message
+from rich.text import Text
 
 from koltui.data import Channel
-from koltui.theme import format_number
+from koltui.theme import format_number, flag_color
 
 
 COLUMNS = [
@@ -34,8 +35,8 @@ class ChannelTable(DataTable):
 
     def __init__(self, channels: list[Channel] | None = None, **kwargs):
         super().__init__(**kwargs)
-        self._channels: list[Channel] = channels or []
-        self._sort_key: str = "cpm"
+        self._channels: list[Channel] = list(channels or [])
+        self._sort_key: str | None = None
         self._sort_reverse: bool = False
 
     def on_mount(self) -> None:
@@ -46,26 +47,26 @@ class ChannelTable(DataTable):
 
     def refresh_data(self, channels: list[Channel]) -> None:
         """Update the table with new channel data."""
-        self._channels = channels
+        self._channels = list(channels)
         self.clear()
         for ch in channels:
             flags_str = "⚠" if ch.fraud_flags else "✓"
             self.add_row(
-                ch.handle,
-                ch.platform,
-                ch.region or "—",
+                Text(ch.handle),
+                Text(ch.platform),
+                Text(ch.region or "—"),
                 format_number(ch.subscribers),
                 format_number(ch.reach),
                 f"{ch.er_pct:.1f}" if ch.er_pct is not None else "—",
                 f"${ch.cpm:.1f}" if ch.cpm is not None else "—",
                 f"{ch.frequency:.1f}" if ch.frequency is not None else "—",
-                flags_str,
+                Text(flags_str, style=flag_color(ch.fraud_flags)),
             )
 
     def on_data_table_header_selected(self, event: DataTable.HeaderSelected) -> None:
         """Sort by clicked column."""
         col_idx = event.column_index
-        if col_idx >= len(COLUMNS):
+        if col_idx < 0 or col_idx >= len(COLUMNS):
             return
         _, attr, _ = COLUMNS[col_idx]
 
@@ -73,13 +74,12 @@ class ChannelTable(DataTable):
             self._sort_reverse = not self._sort_reverse
         else:
             self._sort_key = attr
-            self._sort_reverse = attr in ("cpm",)  # Lower CPM is better, sort ascending by default
+            self._sort_reverse = False
 
-        self._channels.sort(
-            key=lambda ch: getattr(ch, attr) or (0 if isinstance(getattr(ch, attr, 0), (int, float)) else ""),
-            reverse=self._sort_reverse,
-        )
-        self.refresh_data(self._channels)
+        present = [ch for ch in self._channels if getattr(ch, attr) is not None]
+        missing = [ch for ch in self._channels if getattr(ch, attr) is None]
+        present.sort(key=lambda ch: getattr(ch, attr), reverse=self._sort_reverse)
+        self.refresh_data(present + missing)
 
     def on_data_table_row_selected(self, event: DataTable.RowSelected) -> None:
         """Emit channel selected message."""

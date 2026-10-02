@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from rich.text import Text
 
 
 def flag_color(flags: list[str]) -> str:

@@ -3,16 +3,15 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
 
-Terminal dashboard for KOL/influencer analytics built with [Textual](https://textual.textualize.io/). Reads CSV/JSON exports from [kol-toolkit](../kol-toolkit) and provides interactive data exploration.
+Terminal dashboard for KOL/influencer analytics built with [Textual](https://textual.textualize.io/). Reads CSV/JSON exports from [kol-toolkit](https://github.com/Mnilax/kol-toolkit) and provides interactive data exploration.
 
-<!-- TODO: record real TUI session with asciinema/termtosvg and convert to GIF -->
-![Demo](assets/demo.gif)
+Try the included [sample CSV](examples/sample.csv) to explore the dashboard.
 
 ## Features
 
 - **Sortable DataTable** — click any column header to sort (ascending/descending toggle)
 - **Live filter panel** — filter by region, max CPM, min ER% with instant updates
-- **Search** — fuzzy search by channel handle
+- **Search** — case-insensitive substring search by channel handle
 - **Detail pane** — select a row to see expanded metrics and fraud flag explanations
 - **Color-coded flags** — red for high-severity fraud, yellow for medium, green for clean
 - **Keyboard shortcuts** — `q` quit, `f` toggle filters, `/` focus search
@@ -55,7 +54,7 @@ handle, platform, region, subscribers, reach, avg_views,
 er_pct, cpm, frequency, price, fraud_flags
 ```
 
-Generate compatible data with `kol report --csv report.csv` from [kol-toolkit](../kol-toolkit).
+Generate compatible data with `kol report enriched.json --csv report.csv` from [kol-toolkit](https://github.com/Mnilax/kol-toolkit).
 
 ## Architecture
 

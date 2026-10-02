@@ -5,6 +5,7 @@ from __future__ import annotations
 from textual.app import ComposeResult
 from textual.containers import Vertical
 from textual.widgets import Static
+from rich.markup import escape
 
 from koltui.data import Channel
 from koltui.theme import format_number
@@ -27,9 +28,9 @@ class DetailPane(Vertical):
 
     def show_channel(self, ch: Channel) -> None:
         """Update the detail pane with channel info."""
-        parts = [f"[b]{ch.handle}[/b] ({ch.platform})"]
+        parts = [f"[b]{escape(ch.handle)}[/b] ({escape(ch.platform)})"]
         if ch.region:
-            parts[0] += f"  {ch.region}"
+            parts[0] += f"  {escape(ch.region)}"
         parts.append("")
 
         metrics = []
@@ -50,7 +51,7 @@ class DetailPane(Vertical):
             parts.append("")
             parts.append("[b]Fraud Flags:[/b]")
             for f in ch.fraud_flags:
-                parts.append(f"  [red]⚠ {f}[/red]")
+                parts.append(f"  [red]⚠ {escape(f)}[/red]")
         else:
             parts.append("\n[green]✓ No fraud flags[/green]")
 

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import csv
 import json
+import math
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -28,7 +29,7 @@ class Channel:
 def load_csv(path: str) -> list[Channel]:
     """Load channels from a CSV file."""
     channels = []
-    with open(path, newline="", encoding="utf-8") as f:
+    with open(path, newline="", encoding="utf-8-sig") as f:
         reader = csv.DictReader(f)
         for row in reader:
             channels.append(_row_to_channel(row))
@@ -37,13 +38,13 @@ def load_csv(path: str) -> list[Channel]:
 
 def load_json(path: str) -> list[Channel]:
     """Load channels from a JSON file."""
-    with open(path, encoding="utf-8") as f:
+    with open(path, encoding="utf-8-sig") as f:
         data = json.load(f)
 
-    if isinstance(data, list):
+    if isinstance(data, list) and all(isinstance(item, dict) for item in data):
         return [_row_to_channel(item) for item in data]
 
-    return []
+    raise ValueError("Channel JSON must contain a list of objects")
 
 
 def load_file(path: str) -> list[Channel]:
@@ -56,9 +57,9 @@ def load_file(path: str) -> list[Channel]:
 
 def _row_to_channel(row: dict) -> Channel:
     """Convert a dict row to a Channel dataclass."""
-    flags_raw = row.get("fraud_flags", "")
+    flags_raw = row.get("fraud_flags", row.get("Fraud Flags", ""))
     if isinstance(flags_raw, list):
-        flags = flags_raw
+        flags = [str(f.get("message", f.get("code", ""))) if isinstance(f, dict) else str(f) for f in flags_raw]
     elif isinstance(flags_raw, str) and flags_raw:
         flags = [f.strip() for f in flags_raw.split(";") if f.strip()]
     else:
@@ -73,7 +74,7 @@ def _row_to_channel(row: dict) -> Channel:
         avg_views=_float(row.get("avg_views", row.get("Avg Views", 0))),
         er_pct=_float_or_none(row.get("er_pct", row.get("ER%"))),
         cpm=_float_or_none(row.get("cpm", row.get("CPM ($)"))),
-        frequency=_float_or_none(row.get("frequency", row.get("Posts/week"))),
+        frequency=_float_or_none(row.get("frequency", row.get("frequency_per_week", row.get("Posts/week")))),
         fraud_flags=flags,
         price=_float_or_none(row.get("price", row.get("Price ($)"))),
     )
@@ -81,14 +82,16 @@ def _row_to_channel(row: dict) -> Channel:
 
 def _int(val) -> int:
     try:
-        return int(float(str(val).replace(",", "")))
-    except (ValueError, TypeError):
+        result = float(str(val).replace(",", ""))
+        return int(result) if math.isfinite(result) and result >= 0 else 0
+    except (ValueError, TypeError, OverflowError):
         return 0
 
 
 def _float(val) -> float:
     try:
-        return float(str(val).replace(",", ""))
+        result = float(str(val).replace(",", ""))
+        return result if math.isfinite(result) and result >= 0 else 0.0
     except (ValueError, TypeError):
         return 0.0
 
@@ -97,6 +100,7 @@ def _float_or_none(val) -> float | None:
     if val is None or val == "":
         return None
     try:
-        return float(str(val).replace(",", ""))
+        result = float(str(val).replace(",", ""))
+        return result if math.isfinite(result) and result >= 0 else None
     except (ValueError, TypeError):
         return None
